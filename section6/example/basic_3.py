@@ -9,7 +9,7 @@ class TestForm(QMainWindow):                # PyQt5.QtWidgets에서 상속받음
         self.setupUI()          #함수 선언
     def setupUI(self):
         self.setWindowTitle("PyQT test") #제목 표시줄
-        self.setGeometry(800,400,500,300) #창크기  800,400이 모니터 내에서의 위치. 500,300은 가로세로
+        self.setGeometry(800,400,500,400) #창크기  800,400이 모니터 내에서의 위치. 500,300은 가로세로
 
         label_1 = QLabel("입력 테스트", self)
         label_2 = QLabel("출력 테스트", self)    #용어: 라인에디터 (아이디, 비번 쓰는 란 같은거)
@@ -19,18 +19,25 @@ class TestForm(QMainWindow):                # PyQt5.QtWidgets에서 상속받음
 
         self.lineEdit = QLineEdit("",self)          # 글자만
         self.plainEdit = QtWidgets.QPlainTextEdit(self) # 그림 등도 가능!
+        self.plainEdit.setReadOnly(True)            # 옵션. 아래 상자에 쓰기 방지
 
 
         self.lineEdit.move(90,20)
         self.plainEdit.setGeometry(QtCore.QRect(20,90,360,230))
 
         self.lineEdit.textChanged.connect(self.lineEditChanged)
+        self.lineEdit.returnPressed.connect(self.lineEditEnter)             #returnPressed 반환값을 받겠다.
 
+        # 상태바
         self.statusBar = QStatusBar(self)
         self.setStatusBar(self.statusBar)
 
     def lineEditChanged(self):
         self.statusBar.showMessage(self.lineEdit.text())
+
+    def lineEditEnter(self):
+        self.plainEdit.appendPlainText(self.lineEdit.text())
+        self.lineEdit.clear()       #입력 상자 메모리 해제.
 
 if __name__ == "__main__":
     app=QApplication(sys.argv)
